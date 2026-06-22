@@ -765,7 +765,7 @@ function TemplatePage({ onNavigateToCreate, onSelectTemplate, onNavigateToCredit
 /* ========== Page 4: Create Page (Workspace) ========== */
 function CreatePage({ selectedTemplate, onNavigateBack }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [activePanelTab, setActivePanelTab] = useState('prompt')
+  // activePanelTab removed - tags and check now inline under prompt
 
   // Prompt state
   const [prompt, setPrompt] = useState(selectedTemplate ? `使用${selectedTemplate.name}模板，${selectedTemplate.subtitle}风格` : '')
@@ -1054,234 +1054,226 @@ function CreatePage({ selectedTemplate, onNavigateBack }) {
         <div className="workspace-content">
           {/* ===== Left Panel ===== */}
           <div className="left-panel">
-            {/* Panel Tabs */}
-            <div className="panel-tabs">
-              <button
-                className={`panel-tab${activePanelTab === 'prompt' ? ' active' : ''}`}
-                onClick={() => setActivePanelTab('prompt')}
-              >
-                Prompt
-              </button>
-              <button
-                className={`panel-tab${activePanelTab === 'tags' ? ' active' : ''}`}
-                onClick={() => setActivePanelTab('tags')}
-              >
-                标签
-              </button>
-              <button
-                className={`panel-tab${activePanelTab === 'check' ? ' active' : ''}`}
-                onClick={() => setActivePanelTab('check')}
-              >
-                检查
-              </button>
+            {/* Panel Header */}
+            <div style={{
+              padding: '12px 14px', borderBottom: '1px solid var(--border)',
+              fontSize: '13px', fontWeight: 600, color: 'var(--text)',
+              display: 'flex', alignItems: 'center', gap: '6px',
+            }}>
+              <IconWand /> Prompt 编辑
             </div>
 
-            {/* Panel Content */}
+            {/* Panel Content - All in one scrollable view */}
             <div className="panel-content">
-              {activePanelTab === 'prompt' && (
-                <div>
-                  {/* Prompt textarea */}
-                  <textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="请输入视频描述提示词..."
-                    rows={4}
-                    style={{
-                      width: '100%', borderRadius: '10px',
-                      border: '1px solid var(--border)', background: 'var(--bg-input)',
-                      color: 'var(--text)', padding: '10px 12px', fontSize: '13px',
-                      outline: 'none', resize: 'none', lineHeight: '1.6',
-                      fontFamily: 'inherit', marginBottom: '10px',
-                    }}
-                  />
+              {/* Prompt textarea */}
+              <textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="请输入视频描述提示词..."
+                rows={4}
+                style={{
+                  width: '100%', borderRadius: '10px',
+                  border: '1px solid var(--border)', background: 'var(--bg-input)',
+                  color: 'var(--text)', padding: '10px 12px', fontSize: '13px',
+                  outline: 'none', resize: 'none', lineHeight: '1.6',
+                  fontFamily: 'inherit', marginBottom: '10px',
+                }}
+              />
 
-                  {/* AI Optimize + Translate */}
-                  <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
-                    <button
-                      onClick={handleOptimize}
-                      disabled={!prompt.trim() || isOptimizing}
-                      style={{
-                        flex: 1, height: 36, borderRadius: '10px', border: 'none',
-                        background: prompt.trim() && !isOptimizing
-                          ? 'linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%)'
-                          : 'var(--border)',
-                        color: prompt.trim() && !isOptimizing ? '#fff' : 'var(--text-muted)',
-                        fontSize: '13px', fontWeight: 500, cursor: prompt.trim() && !isOptimizing ? 'pointer' : 'not-allowed',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                        transition: 'all 0.2s',
-                      }}
-                    >
-                      {isOptimizing ? (
-                        <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} />
-                      ) : (
-                        <IconSparkles />
-                      )}
-                      {isOptimizing ? '优化中...' : 'AI 优化'}
-                    </button>
-                    <button
-                      onClick={handleTranslate}
-                      disabled={!prompt.trim() || isTranslating}
-                      style={{
-                        flex: 1, height: 36, borderRadius: '10px', border: 'none',
-                        background: prompt.trim() && !isTranslating
-                          ? 'var(--bg-card-hover)'
-                          : 'var(--border)',
-                        color: prompt.trim() && !isTranslating ? 'var(--text)' : 'var(--text-muted)',
-                        fontSize: '13px', fontWeight: 500, cursor: prompt.trim() && !isTranslating ? 'pointer' : 'not-allowed',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                        border: '1px solid var(--border)',
-                      }}
-                    >
-                      {isTranslating ? (
-                        <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid rgba(108,92,231,0.3)', borderTopColor: 'var(--primary)', animation: 'spin 0.8s linear infinite' }} />
-                      ) : (
-                        <IconTranslate />
-                      )}
-                      {isTranslating ? '翻译中...' : '翻译'}
-                    </button>
+              {/* AI Optimize + Translate */}
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                <button
+                  onClick={handleOptimize}
+                  disabled={!prompt.trim() || isOptimizing}
+                  style={{
+                    flex: 1, height: 36, borderRadius: '10px', border: 'none',
+                    background: prompt.trim() && !isOptimizing
+                      ? 'linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%)'
+                      : 'var(--border)',
+                    color: prompt.trim() && !isOptimizing ? '#fff' : 'var(--text-muted)',
+                    fontSize: '13px', fontWeight: 500, cursor: prompt.trim() && !isOptimizing ? 'pointer' : 'not-allowed',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  {isOptimizing ? (
+                    <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', animation: 'spin 0.8s linear infinite' }} />
+                  ) : (
+                    <IconSparkles />
+                  )}
+                  {isOptimizing ? '优化中...' : 'AI 优化'}
+                </button>
+                <button
+                  onClick={handleTranslate}
+                  disabled={!prompt.trim() || isTranslating}
+                  style={{
+                    flex: 1, height: 36, borderRadius: '10px', border: 'none',
+                    background: prompt.trim() && !isTranslating
+                      ? 'var(--bg-card-hover)'
+                      : 'var(--border)',
+                    color: prompt.trim() && !isTranslating ? 'var(--text)' : 'var(--text-muted)',
+                    fontSize: '13px', fontWeight: 500, cursor: prompt.trim() && !isTranslating ? 'pointer' : 'not-allowed',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                    border: '1px solid var(--border)',
+                  }}
+                >
+                  {isTranslating ? (
+                    <div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid rgba(108,92,231,0.3)', borderTopColor: 'var(--primary)', animation: 'spin 0.8s linear infinite' }} />
+                  ) : (
+                    <IconTranslate />
+                  )}
+                  {isTranslating ? '翻译中...' : '翻译'}
+                </button>
+              </div>
+
+              {/* Language selector */}
+              <select
+                value={targetLang}
+                onChange={(e) => setTargetLang(e.target.value)}
+                style={{
+                  width: '100%', height: 34, borderRadius: '8px',
+                  border: '1px solid var(--border)', background: 'var(--bg-input)',
+                  color: 'var(--text)', padding: '0 10px', fontSize: '12px',
+                  outline: 'none', cursor: 'pointer', marginBottom: '10px',
+                }}
+              >
+                {languages.map(l => (
+                  <option key={l.code} value={l.code}>{l.name}</option>
+                ))}
+              </select>
+
+              {/* Translation result */}
+              {showTranslation && translatedPrompt && (
+                <div style={{
+                  background: 'rgba(0,206,201,0.08)', borderRadius: '10px',
+                  border: '1px solid rgba(0,206,201,0.2)',
+                  padding: '10px 12px', fontSize: '13px',
+                  color: 'var(--accent-light)', lineHeight: '1.5',
+                  animation: 'fadeIn 0.3s ease-out', marginBottom: '16px',
+                }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                    {languages.find(l => l.code === targetLang)?.name} 翻译结果：
                   </div>
+                  {translatedPrompt}
+                </div>
+              )}
 
-                  {/* Language selector */}
-                  <select
-                    value={targetLang}
-                    onChange={(e) => setTargetLang(e.target.value)}
+              {/* Divider */}
+              <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0 16px' }} />
+
+              {/* ===== Tags Section ===== */}
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <IconSettings /> 标签管理
+                </div>
+                {/* Existing tags */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+                  {tags.map(tag => (
+                    <div key={tag.id} className="tag-item" style={{ flexDirection: 'column', padding: '8px 12px', gap: '6px', alignItems: 'flex-start' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', width: '100%' }}>
+                        <span>{tag.name}</span>
+                        <span className="tag-remove" onClick={() => handleRemoveTag(tag.id)}><IconX /></span>
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={tag.weight}
+                        onChange={(e) => handleTagWeightChange(tag.id, parseInt(e.target.value))}
+                        className="weight-slider"
+                        style={{ width: '100%' }}
+                      />
+                      <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>权重: {tag.weight}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Add tag */}
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input
+                    type="text"
+                    value={newTagInput}
+                    onChange={(e) => setNewTagInput(e.target.value)}
+                    placeholder="添加标签..."
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
                     style={{
-                      width: '100%', height: 34, borderRadius: '8px',
+                      flex: 1, height: 34, borderRadius: '8px',
                       border: '1px solid var(--border)', background: 'var(--bg-input)',
                       color: 'var(--text)', padding: '0 10px', fontSize: '12px',
-                      outline: 'none', cursor: 'pointer', marginBottom: '10px',
+                      outline: 'none',
+                    }}
+                  />
+                  <button
+                    onClick={handleAddTag}
+                    style={{
+                      width: 34, height: 34, borderRadius: '8px',
+                      border: '1px solid var(--border)', background: 'var(--bg-input)',
+                      color: 'var(--primary-light)', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}
                   >
-                    {languages.map(l => (
-                      <option key={l.code} value={l.code}>{l.name}</option>
-                    ))}
-                  </select>
-
-                  {/* Translation result */}
-                  {showTranslation && translatedPrompt && (
-                    <div style={{
-                      background: 'rgba(0,206,201,0.08)', borderRadius: '10px',
-                      border: '1px solid rgba(0,206,201,0.2)',
-                      padding: '10px 12px', fontSize: '13px',
-                      color: 'var(--accent-light)', lineHeight: '1.5',
-                      animation: 'fadeIn 0.3s ease-out',
-                    }}>
-                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                        {languages.find(l => l.code === targetLang)?.name} 翻译结果：
-                      </div>
-                      {translatedPrompt}
-                    </div>
-                  )}
+                    <IconPlus />
+                  </button>
                 </div>
-              )}
+              </div>
 
-              {activePanelTab === 'tags' && (
-                <div>
-                  {/* Existing tags */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-                    {tags.map(tag => (
-                      <div key={tag.id} className="tag-item" style={{ flexDirection: 'column', padding: '8px 12px', gap: '6px', alignItems: 'flex-start' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', width: '100%' }}>
-                          <span>{tag.name}</span>
-                          <span className="tag-remove" onClick={() => handleRemoveTag(tag.id)}><IconX /></span>
-                        </div>
-                        <input
-                          type="range"
-                          min="0"
-                          max="100"
-                          value={tag.weight}
-                          onChange={(e) => handleTagWeightChange(tag.id, parseInt(e.target.value))}
-                          className="weight-slider"
-                          style={{ width: '100%' }}
-                        />
-                        <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{tag.weight}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Divider */}
+              <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0 16px' }} />
 
-                  {/* Add tag */}
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <input
-                      type="text"
-                      value={newTagInput}
-                      onChange={(e) => setNewTagInput(e.target.value)}
-                      placeholder="添加标签..."
-                      onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
-                      style={{
-                        flex: 1, height: 34, borderRadius: '8px',
-                        border: '1px solid var(--border)', background: 'var(--bg-input)',
-                        color: 'var(--text)', padding: '0 10px', fontSize: '12px',
-                        outline: 'none',
-                      }}
-                    />
-                    <button
-                      onClick={handleAddTag}
-                      style={{
-                        width: 34, height: 34, borderRadius: '8px',
-                        border: '1px solid var(--border)', background: 'var(--bg-input)',
-                        color: 'var(--primary-light)', cursor: 'pointer',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}
-                    >
-                      <IconPlus />
-                    </button>
-                  </div>
+              {/* ===== AI Check Section ===== */}
+              <div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <IconCheck /> AI 检查
                 </div>
-              )}
-
-              {activePanelTab === 'check' && (
-                <div>
-                  {/* Quality Score */}
-                  <div style={{ marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <span style={{ fontSize: '13px', fontWeight: 600 }}>提示词质量评分</span>
-                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--primary-light)' }}>85/100</span>
-                    </div>
-                    <div style={{
-                      width: '100%', height: '8px', borderRadius: '4px',
-                      background: 'var(--border)', overflow: 'hidden',
-                    }}>
-                      <div style={{
-                        height: '100%', borderRadius: '4px',
-                        background: 'linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%)',
-                        width: '85%', transition: 'width 0.5s ease',
-                      }} />
-                    </div>
+                {/* Quality Score */}
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>提示词质量评分</span>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--primary-light)' }}>85/100</span>
                   </div>
-
-                  {/* Check Items */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-                      <span style={{ color: 'var(--success)' }}><IconCheck /></span>
-                      <span>主体描述清晰</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-                      <span style={{ color: 'var(--success)' }}><IconCheck /></span>
-                      <span>场景设定完整</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-                      <span style={{ color: 'var(--warning)' }}><IconWarning /></span>
-                      <span style={{ color: 'var(--warning)' }}>建议添加光线描述</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-                      <span style={{ color: 'var(--warning)' }}><IconWarning /></span>
-                      <span style={{ color: 'var(--warning)' }}>建议添加运动描述</span>
-                    </div>
-                  </div>
-
-                  {/* Optimization Suggestions */}
                   <div style={{
-                    background: 'var(--bg-input)', borderRadius: '10px',
-                    border: '1px solid var(--border)', padding: '12px',
-                    fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.6',
+                    width: '100%', height: '6px', borderRadius: '3px',
+                    background: 'var(--border)', overflow: 'hidden',
                   }}>
-                    <div style={{ fontWeight: 600, marginBottom: '6px', color: 'var(--text)' }}>优化建议</div>
-                    1. 在提示词中加入光线描述，如"柔和的黄金时段光线"<br/>
-                    2. 添加运动描述，如"缓慢推进镜头"或"平滑过渡"<br/>
-                    3. 可以增加色彩氛围描述，提升画面质感
+                    <div style={{
+                      height: '100%', borderRadius: '3px',
+                      background: 'linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%)',
+                      width: '85%', transition: 'width 0.5s ease',
+                    }} />
                   </div>
                 </div>
-              )}
+
+                {/* Check Items */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
+                    <span style={{ color: 'var(--success)' }}><IconCheck /></span>
+                    <span>主体描述清晰</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
+                    <span style={{ color: 'var(--success)' }}><IconCheck /></span>
+                    <span>场景设定完整</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
+                    <span style={{ color: 'var(--warning)' }}><IconWarning /></span>
+                    <span style={{ color: 'var(--warning)' }}>建议添加光线描述</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
+                    <span style={{ color: 'var(--warning)' }}><IconWarning /></span>
+                    <span style={{ color: 'var(--warning)' }}>建议添加运动描述</span>
+                  </div>
+                </div>
+
+                {/* Optimization Suggestions */}
+                <div style={{
+                  background: 'var(--bg-input)', borderRadius: '10px',
+                  border: '1px solid var(--border)', padding: '10px 12px',
+                  fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.6',
+                }}>
+                  <div style={{ fontWeight: 600, marginBottom: '4px', color: 'var(--text)', fontSize: '12px' }}>优化建议</div>
+                  1. 在提示词中加入光线描述，如"柔和的黄金时段光线"<br/>
+                  2. 添加运动描述，如"缓慢推进镜头"或"平滑过渡"<br/>
+                  3. 可以增加色彩氛围描述，提升画面质感
+                </div>
+              </div>
             </div>
           </div>
 
